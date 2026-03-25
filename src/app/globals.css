@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui;
+  --font-serif: var(--font-playfair), ui-serif, Georgia;
+  
+  /* Moroccan Theme Colors */
+  --color-morocco-emerald: #064e3b;
+  --color-morocco-gold: #b45309;
+  --color-morocco-ivory: #fcfaf2;
+  --color-morocco-clay: #9a3412;
+}
+
+:root {
+  --background: #fcfaf2; /* Ivory Mist */
+  --foreground: #064e3b; /* Emerald */
+  
+  --glass-bg: rgba(252, 250, 242, 0.7);
+  --glass-border: rgba(6, 78, 59, 0.1);
+}
+
+.dark {
+  --background: #022c22; /* Deep Emerald */
+  --foreground: #fcfaf2; /* Ivory */
+  
+  --glass-bg: rgba(2, 44, 34, 0.7);
+  --glass-border: rgba(180, 83, 9, 0.2);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Glassmorphism Utility */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
