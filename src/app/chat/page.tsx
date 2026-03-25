@@ -102,6 +102,19 @@ export default function ChatPage() {
     }
   }, [sessions, currentSessionId]);
 
+  // 🔄 Auto-retry pending message if last message was from user (catch refresh mid-response)
+  useEffect(() => {
+    if (!mounted || !currentSessionId) return;
+    const session = sessions.find(s => s.id === currentSessionId);
+    if (!session || session.messages.length === 0) return;
+    const lastMsg = session.messages[session.messages.length - 1];
+    if (lastMsg.role === 'user') {
+      // There's an unanswered user message — re-send it
+      handleSend(lastMsg.content);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, currentSessionId]);
+
   const createNewSession = () => {
     const newId = Date.now().toString();
     const newSession: ChatSession = {
@@ -131,12 +144,30 @@ export default function ChatPage() {
 
     // Optimistic update
     const updatedMessages = [...(currentSession?.messages || []), userMessage];
-    setSessions(prev => prev.map(s => {
+    const updatedSessions = sessions.map(s => {
       if (s.id === currentSessionId) {
         return { ...s, messages: updatedMessages, updatedAt: Date.now() };
       }
       return s;
-    }));
+    });
+    setSessions(updatedSessions);
+
+    // ✅ Persist user message immediately so refresh doesn't lose it
+    const sessionToSave = updatedSessions.find(s => s.id === currentSessionId);
+    if (sessionToSave) {
+      if (user) {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/sessions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...sessionToSave, user_email: user.email })
+        }).catch(() => {});
+      } else {
+        const stored = JSON.parse(localStorage.getItem('loimaroc_chats') || '[]');
+        const idx = stored.findIndex((s: any) => s.id === currentSessionId);
+        if (idx >= 0) stored[idx] = sessionToSave; else stored.unshift(sessionToSave);
+        localStorage.setItem('loimaroc_chats', JSON.stringify(stored));
+      }
+    }
 
     if (!overrideText) setInput("");
     else setInput("");
@@ -335,8 +366,8 @@ export default function ChatPage() {
                 <Send size={24} />
               </button>
             </div>
-            <p className="text-center mt-4 text-xs text-morocco-emerald/30 font-bold uppercase tracking-[0.2em]">
-              L'IA peut faire des erreurs. Pour toute décision critique, consultez un avocat.
+            <p className="text-center mt-4 text-xs text-morocco-emerald/60 font-semibold tracking-wide">
+              ⚠️ Omar peut faire des erreurs. Pour toute décision critique, consultez un avocat.
             </p>
           </div>
         </div>
