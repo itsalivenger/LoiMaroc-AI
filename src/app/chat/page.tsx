@@ -119,13 +119,14 @@ export default function ChatPage() {
   // Prevent hydration mismatch
   if (!mounted) return <div className="h-screen bg-morocco-ivory/20" />;
 
-  const handleSend = async () => {
-    if (!input.trim() || !currentSessionId) return;
+  const handleSend = async (overrideText?: string) => {
+    const text = overrideText ?? input;
+    if (!text.trim() || !currentSessionId) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: "user",
-      content: input,
+      content: text,
     };
 
     // Optimistic update
@@ -137,7 +138,8 @@ export default function ChatPage() {
       return s;
     }));
 
-    setInput("");
+    if (!overrideText) setInput("");
+    else setInput("");
     setIsLoading(true);
 
     try {
@@ -145,7 +147,7 @@ export default function ChatPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          query: input,
+          query: text,
           session_id: currentSessionId,
           user_email: user?.email || null
         })
@@ -267,10 +269,10 @@ export default function ChatPage() {
                 </p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-                <SuggestionCard text="Quelles sont les conditions de licenciement ?" onSelect={(t) => { setInput(t); setTimeout(handleSend, 0); }} />
-                <SuggestionCard text="Puis-je avoir un contrat verbal ?" onSelect={(t) => { setInput(t); setTimeout(handleSend, 0); }} />
-                <SuggestionCard text="La durée légale de la période d'essai ?" onSelect={(t) => { setInput(t); setTimeout(handleSend, 0); }} />
-                <SuggestionCard text="Calcul de la prime d'ancienneté" onSelect={(t) => { setInput(t); setTimeout(handleSend, 0); }} />
+                <SuggestionCard text="Quelles sont les conditions de licenciement ?" onSelect={(t) => handleSend(t)} />
+                <SuggestionCard text="Puis-je avoir un contrat verbal ?" onSelect={(t) => handleSend(t)} />
+                <SuggestionCard text="La durée légale de la période d'essai ?" onSelect={(t) => handleSend(t)} />
+                <SuggestionCard text="Calcul de la prime d'ancienneté" onSelect={(t) => handleSend(t)} />
               </div>
             </div>
           )}
@@ -326,7 +328,7 @@ export default function ChatPage() {
                 className="w-full pl-16 pr-20 py-6 rounded-[2.5rem] border-2 border-morocco-emerald/10 bg-morocco-ivory/20 focus:bg-white focus:border-morocco-emerald outline-none transition-all text-lg font-medium text-morocco-emerald"
               />
               <button 
-                onClick={handleSend}
+                onClick={() => handleSend()}
                 disabled={isLoading}
                 className="absolute right-4 p-4 rounded-3xl bg-morocco-emerald text-morocco-gold hover:scale-105 active:scale-95 transition-all shadow-xl disabled:opacity-50 disabled:scale-100"
               >
