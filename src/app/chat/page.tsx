@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { Send, Scale, User, Paperclip, Search, Plus, Trash2, BookOpen, Clock, ChevronRight, MessageSquare, ShieldCheck } from "lucide-react";
 
 interface Message {
@@ -26,6 +27,7 @@ export default function ChatPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // Handle hydration and load sessions
   useEffect(() => {
@@ -277,10 +279,35 @@ export default function ChatPage() {
             </div>
           </div>
           <div className="flex gap-2">
-            <button className="p-3 rounded-xl bg-morocco-ivory text-morocco-emerald hover:bg-morocco-gold/10 transition-colors">
+            <button
+              onClick={() => router.push('/codes')}
+              title="Consulter les Codes Juridiques"
+              className="p-3 rounded-xl bg-morocco-ivory text-morocco-emerald hover:bg-morocco-gold/10 transition-colors"
+            >
               <BookOpen size={20} />
             </button>
-            <button className="p-3 rounded-xl bg-morocco-ivory text-red-500 hover:bg-red-50 transition-colors">
+            <button
+              onClick={async () => {
+                if (!currentSessionId) return;
+                if (!confirm('Supprimer cette conversation ?')) return;
+                // Remove from state
+                const remaining = sessions.filter(s => s.id !== currentSessionId);
+                setSessions(remaining);
+                if (remaining.length > 0) setCurrentSessionId(remaining[0].id);
+                else createNewSession();
+                // Remove from backend or localStorage
+                if (user) {
+                  await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/sessions/${currentSessionId}`, {
+                    method: 'DELETE'
+                  }).catch(() => {});
+                } else {
+                  const stored = JSON.parse(localStorage.getItem('loimaroc_chats') || '[]');
+                  localStorage.setItem('loimaroc_chats', JSON.stringify(stored.filter((s: any) => s.id !== currentSessionId)));
+                }
+              }}
+              title="Supprimer la conversation"
+              className="p-3 rounded-xl bg-morocco-ivory text-red-500 hover:bg-red-50 transition-colors"
+            >
               <Trash2 size={20} />
             </button>
           </div>
@@ -367,7 +394,7 @@ export default function ChatPage() {
               </button>
             </div>
             <p className="text-center mt-4 text-xs text-morocco-emerald/60 font-semibold tracking-wide">
-              ⚠️ Omar est une IA et peut faire des erreurs. Pour toute décision critique, consultez un avocat.
+              ⚠️ This AI can make mistakes. For any critical decision, please consult a lawyer.
             </p>
           </div>
         </div>
