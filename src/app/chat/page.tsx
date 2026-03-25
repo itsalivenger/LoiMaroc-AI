@@ -367,7 +367,7 @@ export default function ChatPage() {
               </button>
             </div>
             <p className="text-center mt-4 text-xs text-morocco-emerald/60 font-semibold tracking-wide">
-              ⚠️ Omar peut faire des erreurs. Pour toute décision critique, consultez un avocat.
+              ⚠️ Omar est une IA et peut faire des erreurs. Pour toute décision critique, consultez un avocat.
             </p>
           </div>
         </div>
