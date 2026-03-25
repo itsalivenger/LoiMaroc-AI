@@ -187,7 +187,7 @@ export default function ChatPage() {
   return (
     <div className="flex h-[calc(100vh-64px)] bg-morocco-ivory/20 overflow-hidden font-sans">
       {/* Sidebar - Recent Chats */}
-      <aside className="hidden lg:flex flex-col w-80 bg-white border-r border-morocco-emerald/5 shadow-xl">
+      <aside className="hidden lg:flex flex-col w-96 shrink-0 bg-white border-r border-morocco-emerald/5 shadow-xl overflow-hidden">
         <div className="p-6">
           <button 
             onClick={createNewSession}
