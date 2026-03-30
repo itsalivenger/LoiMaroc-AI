@@ -41,10 +41,22 @@ function SignInContent() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.detail || "Échec de la connexion");
 
-      // Save user session and clear guest chats
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.removeItem("loimaroc_chats");
-      router.push("/chat");
+      console.log("[Login Debug] Login successful. User data received:", data.user);
+
+      if (data.user && data.user.email) {
+        // Save user session and clear guest chats
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.removeItem("loimaroc_chats");
+        
+        // IMPORTANT: Trigger storage event for the Navbar to react immediately
+        window.dispatchEvent(new Event("storage"));
+        
+        console.log("[Login Debug] User saved to localStorage and storage event dispatched.");
+        router.push("/chat");
+      } else {
+        console.error("[Login Debug] User object missing in login response!");
+        setError("Une erreur s'est produite lors de la connexion.");
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {

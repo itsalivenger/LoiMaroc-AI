@@ -33,17 +33,28 @@ export default function ChatPage() {
   useEffect(() => {
     setMounted(true);
     
-    // Get logged in user
-    const storedUser = localStorage.getItem("user");
+    const storedUser = typeof window !== 'undefined' ? localStorage.getItem("user") : null;
     let currentUserEmail = null;
+    
+    console.log("[Chat Debug] Checking stored user:", storedUser);
+    
     if (storedUser && storedUser !== "undefined" && storedUser !== "null") {
       try {
         const u = JSON.parse(storedUser);
+        console.log("[Chat Debug] User session identified:", u.email);
         setUser(u);
         currentUserEmail = u.email;
       } catch (e) {
-        console.error("Failed to parse user session:", e);
+        console.error("[Chat Debug] Failed to parse user session:", e);
+        // Clear corrupt data
+        localStorage.removeItem("user");
       }
+    } else {
+      console.log("[Chat Debug] No valid user session found.");
+    }
+    
+    if (currentUserEmail) {
+      console.log("[Chat Debug] Loading backend sessions for:", currentUserEmail);
     }
 
     // Load from backend if possible, else fallback to localStorage

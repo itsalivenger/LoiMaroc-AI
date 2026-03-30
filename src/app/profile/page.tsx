@@ -11,20 +11,26 @@ export default function ProfilePage() {
   const router = useRouter();
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const storedUser = localStorage.getItem("user");
-    if (!storedUser) {
-      router.push("/sign-in");
-      return;
-    }
-    try {
-      setUser(JSON.parse(storedUser));
-    } catch (e) {
+    
+    if (storedUser && storedUser !== "undefined" && storedUser !== "null") {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("[Profile Debug] Failed to parse user", e);
+        localStorage.removeItem("user");
+        router.push("/sign-in");
+      }
+    } else {
       router.push("/sign-in");
     }
   }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    // Trigger storage event for Navbar
+    window.dispatchEvent(new Event("storage"));
     router.push("/");
   };
 
