@@ -17,19 +17,14 @@ export function Navbar() {
       if (typeof window === 'undefined') return;
       const storedUser = localStorage.getItem("user");
       
-      console.log("[Navbar Debug] Checking user in localStorage:", storedUser);
-      
       if (storedUser && storedUser !== "undefined" && storedUser !== "null") {
         try {
           const parsed = JSON.parse(storedUser);
-          console.log("[Navbar Debug] User identified:", parsed);
           setUser(parsed);
         } catch (e) {
-          console.error("[Navbar Debug] Failed to parse user", e);
           setUser(null);
         }
       } else {
-        console.log("[Navbar Debug] No valid user found.");
         setUser(null);
       }
     };
