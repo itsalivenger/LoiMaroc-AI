@@ -197,19 +197,26 @@ export default function ChatPage() {
         source: data.sources?.[0] || undefined
       };
 
-      setSessions(prev => prev.map(s => {
-        if (s.id === currentSessionId) {
-          const finalMessages = [...updatedMessages, aiMessage];
-          // Sync with backend MongoDB
+      setSessions(prev => {
+        const next = prev.map(s => {
+          if (s.id === currentSessionId) {
+            return { ...s, messages: [...updatedMessages, aiMessage] };
+          }
+          return s;
+        });
+        
+        // Sync with backend MongoDB (Side effect outside of state update)
+        const updatedSession = next.find(s => s.id === currentSessionId);
+        if (updatedSession && user) {
           fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/sessions`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...s, messages: finalMessages, email: user?.email })
-          });
-          return { ...s, messages: finalMessages };
+            body: JSON.stringify({ ...updatedSession, email: user.email })
+          }).catch(() => {});
         }
-        return s;
-      }));
+        
+        return next;
+      });
     } catch (err) {
       console.error(err);
     } finally {
@@ -337,7 +344,7 @@ export default function ChatPage() {
 
           {currentSession?.messages.map((msg, i) => (
             <motion.div
-              key={msg.id}
+              key={msg.id || `msg-${i}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
