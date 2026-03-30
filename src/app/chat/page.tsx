@@ -36,12 +36,14 @@ export default function ChatPage() {
     // Get logged in user
     const storedUser = localStorage.getItem("user");
     let currentUserEmail = null;
-    if (storedUser) {
+    if (storedUser && storedUser !== "undefined" && storedUser !== "null") {
       try {
         const u = JSON.parse(storedUser);
         setUser(u);
         currentUserEmail = u.email;
-      } catch (e) {}
+      } catch (e) {
+        console.error("Failed to parse user session:", e);
+      }
     }
 
     // Load from backend if possible, else fallback to localStorage
