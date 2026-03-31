@@ -55,6 +55,7 @@ export function Navbar() {
             alt="LoiMaroc AI"
             width={48}
             height={48}
+            priority
             className="object-contain transition-transform group-hover:scale-110 scale-[1.3]"
           />
           <span className="font-serif text-xl font-bold text-morocco-emerald tracking-tight">
