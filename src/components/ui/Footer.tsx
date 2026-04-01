@@ -1,8 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export function Footer() {
+  const pathname = usePathname();
+  const isAdmin = pathname?.startsWith("/admin");
+  
+  if (isAdmin) return null;
   return (
     <footer className="bg-morocco-emerald text-morocco-ivory py-16">
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12">

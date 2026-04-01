@@ -11,6 +11,9 @@ export function Navbar() {
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   const router = useRouter();
   const pathname = usePathname();
+  const isAdmin = pathname?.startsWith("/admin");
+
+  if (isAdmin) return null;
 
   useEffect(() => {
     const checkUser = () => {

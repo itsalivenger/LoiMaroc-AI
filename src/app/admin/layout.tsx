@@ -54,10 +54,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="hidden lg:flex flex-col w-72 bg-morocco-emerald text-white fixed h-full z-20 shadow-2xl">
         <div className="p-8 border-b border-white/10">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-morocco-gold flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-              <ShieldCheck size={24} className="text-white" />
+            <div className="w-12 h-12 rounded-xl bg-white/10 p-1 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform overflow-hidden">
+              <img 
+                src="/images/logo_LoiMaroc_AI.png" 
+                alt="Logo" 
+                className="w-full h-full object-contain"
+              />
             </div>
-            <span className="font-serif text-xl font-bold tracking-tight">AdminPanel</span>
+            <div className="flex flex-col">
+              <span className="font-serif text-lg font-bold tracking-tight text-morocco-gold">LoiMaroc AI</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">Administration</span>
+            </div>
           </Link>
         </div>
 
@@ -94,10 +101,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 w-full bg-morocco-emerald text-white p-4 flex items-center justify-between z-30 shadow-lg">
-        <div className="flex items-center gap-2">
-          <ShieldCheck size={24} className="text-morocco-gold" />
-          <span className="font-serif font-bold italic">AdminPanel</span>
-        </div>
+        <Link href="/" className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-white/10 p-1">
+             <img src="/images/logo_LoiMaroc_AI.png" alt="Logo" className="w-full h-full object-contain" />
+          </div>
+          <span className="font-serif font-bold text-morocco-gold">LoiMaroc AI</span>
+        </Link>
         <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
