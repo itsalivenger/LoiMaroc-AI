@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { Send, Scale, User, Paperclip, Search, Plus, Trash2, BookOpen, Clock, ChevronRight, MessageSquare, ShieldCheck } from "lucide-react";
+import { Send, Scale, User, Paperclip, Search, Plus, Trash2, BookOpen, Clock, ChevronRight, MessageSquare, ShieldCheck, Star } from "lucide-react";
+import ReviewOverlay from "@/components/ReviewOverlay";
 
 interface Message {
   id: string;
@@ -26,6 +27,7 @@ export default function ChatPage() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -297,6 +299,13 @@ export default function ChatPage() {
               <BookOpen size={20} />
             </button>
             <button
+              onClick={() => setIsReviewOpen(true)}
+              title="Laisser un avis"
+              className="p-3 rounded-xl bg-morocco-ivory text-morocco-gold hover:bg-morocco-gold/20 transition-colors"
+            >
+              <Star size={20} />
+            </button>
+            <button
               onClick={async () => {
                 if (!currentSessionId) return;
                 if (!confirm('Supprimer cette conversation ?')) return;
@@ -409,6 +418,16 @@ export default function ChatPage() {
           </div>
         </div>
       </main>
+
+      {/* Review Overlay */}
+      {currentSessionId && (
+        <ReviewOverlay 
+          isOpen={isReviewOpen} 
+          onClose={() => setIsReviewOpen(false)} 
+          sessionId={currentSessionId}
+          userEmail={user?.email}
+        />
+      )}
     </div>
   );
 }

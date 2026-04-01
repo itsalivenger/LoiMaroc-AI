@@ -12,7 +12,8 @@ import {
   ShieldCheck,
   ChevronRight,
   Menu,
-  X
+  X,
+  Star
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -44,6 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { icon: <Users size={20} />, label: "Utilisateurs", href: "/admin/users" },
     { icon: <Settings size={20} />, label: "Configuration", href: "/admin/config" },
     { icon: <History size={20} />, label: "Historique", href: "/admin/history" },
+    { icon: <Star size={20} />, label: "Avis Clients", href: "/admin/reviews" },
   ];
 
   return (
