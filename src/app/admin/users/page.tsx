@@ -116,7 +116,7 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Main Table Container */}
-      <div className="bg-white rounded-[2.5rem] border border-morocco-emerald/5 shadow-xl overflow-hidden">
+      <div className="bg-white rounded-[2.5rem] border border-morocco-emerald/5 shadow-xl overflow-hidden w-full max-w-full">
         {/* Search Bar */}
         <div className="p-8 border-b border-morocco-emerald/5 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-morocco-ivory/10">
           <div className="relative flex-grow max-w-md group">

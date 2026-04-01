@@ -91,7 +91,7 @@ export default function AdminHistoryPage() {
       </header>
 
       {/* Main Content Area */}
-      <div className="bg-white rounded-[2.5rem] border border-morocco-emerald/5 shadow-xl overflow-hidden relative min-h-[500px]">
+      <div className="bg-white rounded-[2.5rem] border border-morocco-emerald/5 shadow-xl overflow-hidden relative min-h-[500px] w-full max-w-full">
         {isLoading ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 backdrop-blur-sm z-10">
             <RefreshCcw className="animate-spin text-morocco-gold mb-4" size={48} />

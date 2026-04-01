@@ -146,7 +146,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </AnimatePresence>
 
       {/* Main Content Area */}
-      <main className="flex-grow lg:pl-72 pt-16 lg:pt-0">
+      <main className="flex-grow min-w-0 lg:pl-72 pt-16 lg:pt-0">
         <div className="p-4 md:p-8 lg:p-12">
           {children}
         </div>
