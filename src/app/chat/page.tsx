@@ -109,18 +109,6 @@ export default function ChatPage() {
     }
   }, [sessions, currentSessionId]);
 
-  // 🔄 Auto-retry pending message if last message was from user (catch refresh mid-response)
-  useEffect(() => {
-    if (!mounted || !currentSessionId) return;
-    const session = sessions.find(s => s.id === currentSessionId);
-    if (!session || session.messages.length === 0) return;
-    const lastMsg = session.messages[session.messages.length - 1];
-    if (lastMsg.role === 'user') {
-      // There's an unanswered user message — re-send it
-      handleSend(lastMsg.content);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mounted, currentSessionId]);
 
   const createNewSession = () => {
     const newId = Date.now().toString();
@@ -144,7 +132,7 @@ export default function ChatPage() {
     if (!text.trim() || !currentSessionId) return;
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: Date.now().toString() + "-" + Math.random().toString(36).substring(2, 9),
       role: "user",
       content: text,
     };
@@ -196,7 +184,7 @@ export default function ChatPage() {
       const data = await response.json();
       
       const aiMessage: Message = {
-        id: Date.now().toString(),
+        id: Date.now().toString() + "-" + Math.random().toString(36).substring(2, 9),
         role: "assistant",
         content: data.answer,
         source: data.sources?.[0] || undefined
@@ -356,7 +344,7 @@ export default function ChatPage() {
 
           {currentSession?.messages.map((msg, i) => (
             <motion.div
-              key={msg.id || `msg-${i}`}
+              key={`${msg.id || "msg"}-${msg.role}-${i}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}

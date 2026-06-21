@@ -18,6 +18,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://loi-maroc-ai.vercel.app"),
   title: "LoiMaroc AI - Votre Expert Juridique",
   description: "Intelligence Artificielle au service du droit marocain. Réponses précises basées sur les textes de loi officiels.",
   icons: {
