@@ -8,8 +8,8 @@ export default function Home() {
   return (
     <>
       <section className="relative pt-24 pb-40 overflow-hidden bg-gradient-to-b from-morocco-ivory via-white to-white">
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[1000px] h-[1000px] bg-morocco-emerald/5 rounded-full blur-[120px] opacity-40 animate-pulse" />
-        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-morocco-gold/5 rounded-full blur-[100px] opacity-30" />
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[1000px] h-[1000px] bg-morocco-emerald/5 rounded-full blur-[120px] opacity-40 animate-pulse pointer-events-none" />
+        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-morocco-gold/5 rounded-full blur-[100px] opacity-30 pointer-events-none" />
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-5xl mx-auto text-center space-y-10">
