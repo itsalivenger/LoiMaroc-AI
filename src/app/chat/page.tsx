@@ -321,7 +321,7 @@ export default function ChatPage() {
         </header>
 
         {/* Messages */}
-        <div className="flex-grow overflow-y-auto px-6 py-10 space-y-8 scroll-smooth" ref={scrollRef}>
+        <div className="flex-grow overflow-y-auto overflow-x-hidden px-6 py-10 space-y-8 scroll-smooth" ref={scrollRef}>
           {currentSession?.messages.length === 0 && (
             <div className="h-full flex flex-col items-center justify-center text-center max-w-lg mx-auto space-y-8">
               <div className="w-24 h-24 rounded-full bg-morocco-emerald/5 flex items-center justify-center text-morocco-emerald mb-4">
@@ -349,13 +349,13 @@ export default function ChatPage() {
               animate={{ opacity: 1, y: 0 }}
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div className={`max-w-[85%] md:max-w-[70%] space-y-2`}>
+              <div className={`max-w-[85%] md:max-w-[70%] min-w-0 space-y-2`}>
                 <div className={`p-6 rounded-[2rem] shadow-sm ${
                   msg.role === 'user' 
                   ? 'bg-morocco-emerald text-morocco-ivory rounded-tr-none' 
                   : 'bg-morocco-ivory text-morocco-emerald rounded-tl-none border border-morocco-emerald/5'
                 }`}>
-                  <p className="leading-relaxed text-lg font-bold">{msg.content}</p>
+                  <p className="leading-relaxed text-lg font-bold break-words whitespace-pre-wrap overflow-hidden">{msg.content}</p>
                 </div>
                 {msg.source && (
                   <div className="px-4 flex items-center gap-2 text-morocco-gold text-xs font-bold uppercase tracking-widest italic">
